@@ -84,7 +84,10 @@ export default function computeLocalHash (document, version) {
             )
           ); // + unmappedFields.join(",")
         } else {
-          resolve(sha256(toUTF8Data(normalized)));
+          const fs = require('fs');
+          fs.writeFileSync("./theProper.nq", normalized, { encoding: 'utf-8'});
+          let hash = sha256(toUTF8Data(normalized));
+          resolve(hash);
         }
       }
     });

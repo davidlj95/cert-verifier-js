@@ -1,3 +1,4 @@
+import CowcertsV0Valid from './cowcerts';
 import EthereumMainV2Valid from './ethereum-main-valid-2.0';
 import EthereumMainInvalidMerkleRoot from './ethereum-merkle-root-unmatch-2.0';
 import EthereumMainRevoked from './ethereum-revoked-2.0';
@@ -19,6 +20,7 @@ import TestnetV2Valid from './testnet-valid-2.0';
 import TestnetV2ValidV1Issuer from './testnet-valid-v1-issuer-2.0';
 
 export default {
+  CowcertsV0Valid,
   EthereumMainV2Valid,
   EthereumMainInvalidMerkleRoot,
   EthereumMainRevoked,
