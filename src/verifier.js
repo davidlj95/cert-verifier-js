@@ -244,9 +244,15 @@ export default class Verifier {
     this._doAction(SUB_STEPS.checkExpiresDate, () =>
       inspectors.ensureNotExpired(this.expires)
     );
+
+    // Check official validation
+    this._doAction(SUB_STEPS.checkOfficialValidationIsPresent, () =>
+      inspectors.ensureOfficializationIsPresent(this.documentToVerify)
+    );
+
   }
 
-  /**
+  /**;
    * _failed
    *
    * Returns a failure final step message

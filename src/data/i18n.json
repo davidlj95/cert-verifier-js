@@ -6,7 +6,9 @@
       "hashComparisonLabel": "Hash comparison",
       "hashComparisonLabelPending": "Comparing hash",
       "statusCheckLabel": "Status check",
-      "statusCheckLabelPending": "Checking record status"
+      "statusCheckLabelPending": "Checking record status",
+      "officialCheckLabel": "Official ministry validation",
+      "officialCheckLabelPending": "Checking ministry approval"
     },
     "subSteps": {
       "getTransactionIdLabel": "Get transaction ID",
@@ -32,7 +34,9 @@
       "checkRevokedStatusLabel": "Check Revoked Status",
       "checkRevokedStatusLabelPending": "Checking Revoked Status",
       "checkExpiresDateLabel": "Check Expiration Date",
-      "checkExpiresDateLabelPending": "Checking Expiration Date"
+      "checkExpiresDateLabelPending": "Checking Expiration Date",
+      "checkOfficialValidationIsPresentLabel": "Check Officialization Requirement",
+      "checkOfficialValidationIsPresentLabelPending": "Checking if the certificate requires officialization"
     },
     "revocation": {
       "preReason": "Reason given:",

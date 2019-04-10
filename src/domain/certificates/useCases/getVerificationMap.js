@@ -20,7 +20,8 @@ const versionVerificationMap = {
     SUB_STEPS.computeLocalHash,
     SUB_STEPS.compareHashes,
     SUB_STEPS.checkReceipt,
-    SUB_STEPS.checkExpiresDate
+    SUB_STEPS.checkExpiresDate,
+    SUB_STEPS.checkOfficialValidationIsPresent
   ]
 };
 

@@ -1,6 +1,7 @@
 const formatValidation = 'formatValidation';
 const hashComparison = 'hashComparison';
 const statusCheck = 'statusCheck';
+const officialCheck = 'officialCheck';
 const final = 'final';
 
 const language = {
@@ -18,7 +19,12 @@ const language = {
     label: 'Status check',
     labelPending: 'Checking record status',
     subSteps: []
+  },
+  [officialCheck]: {
+    label: 'Officiality check',
+    labelPending: 'Checking if the record has been officialized',
+    subSteps: []
   }
 };
 
-export { final, formatValidation, hashComparison, statusCheck, language };
+export { final, formatValidation, hashComparison, statusCheck, officialCheck, language };
