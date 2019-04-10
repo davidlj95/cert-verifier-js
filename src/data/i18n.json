@@ -73,7 +73,8 @@
       "getCaseInsensitiveKey": "Transaction occurred at time when issuing address was not considered valid.",
       "ensureValidReceipt": "The receipt is malformed. There was a problem navigating the merkle tree in the receipt.",
       "invalidMerkleReceipt": "Invalid Merkle Receipt. Proof hash did not match Merkle root",
-      "isTransactionIdValid": "Cannot verify this certificate without a transaction ID to compare against."
+      "isTransactionIdValid": "Cannot verify this certificate without a transaction ID to compare against.",
+      "ensureOfficializationIsPresent": "The certificate must be approved by the ministry and does not have the seal of approval."
     }
   },
   "es-ES": {

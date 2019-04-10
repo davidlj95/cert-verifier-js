@@ -246,9 +246,11 @@ export default class Verifier {
     );
 
     // Check official validation
-    this._doAction(SUB_STEPS.checkOfficialValidationIsPresent, () =>
-      inspectors.ensureOfficializationIsPresent(this.documentToVerify)
-    );
+    if(this.documentToVerify.badge.official) {
+      this._doAction(SUB_STEPS.checkOfficialValidationIsPresent, () =>
+          inspectors.ensureOfficializationIsPresent(this.documentToVerify)
+      );
+    }
 
   }
 

@@ -84,7 +84,8 @@ export default function computeLocalHash (document, version) {
             )
           ); // + unmappedFields.join(",")
         } else {
-          resolve(sha256(toUTF8Data(normalized)));
+          let hash = sha256(toUTF8Data(normalized));
+          resolve(hash);
         }
       }
     });
