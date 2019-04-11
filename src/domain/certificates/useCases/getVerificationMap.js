@@ -27,7 +27,10 @@ const versionVerificationMap = {
     SUB_STEPS.checkOfficialValidationCheckReceipt,
     SUB_STEPS.checkEDSEndorsementComputeLocalHash,
     SUB_STEPS.checkEDSEndorsementCompareHashes,
-    SUB_STEPS.checkEDSEndorsementCheckReceipt
+    SUB_STEPS.checkEDSEndorsementCheckReceipt,
+    SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
+    SUB_STEPS.checkRecipientEndorsementCompareHashes,
+    SUB_STEPS.checkRecipientEndorsementCheckReceipt
   ]
 };
 

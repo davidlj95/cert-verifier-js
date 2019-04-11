@@ -3,6 +3,7 @@ const hashComparison = 'hashComparison';
 const statusCheck = 'statusCheck';
 const officialCheck = 'officialCheck';
 const edsCheck = 'edsCheck';
+const recipientCheck = 'recipientCheck';
 const final = 'final';
 
 const language = {
@@ -30,7 +31,12 @@ const language = {
     label: 'EDS check',
     labelPending: 'Checking if the record\'s EDS check',
     subSteps: []
-  }
+  },
+  [recipientCheck]: {
+    label: 'Recipient check',
+    labelPending: 'Checking if the record\'s recipient check',
+    subSteps: []
+}
 };
 
-export { final, formatValidation, hashComparison, statusCheck, officialCheck, edsCheck, language };
+export { final, formatValidation, hashComparison, statusCheck, officialCheck, edsCheck, recipientCheck, language };

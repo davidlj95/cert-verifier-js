@@ -284,6 +284,7 @@ export default class Verifier {
       let recipientEndorsementAndSig = Verifier._findRecipientEndorsement(this.fullCertificate, extraEndorsements);
       if(recipientEndorsementAndSig) {
         let [recipientEndorsement, recipientEndorsementSignature] = recipientEndorsementAndSig;
+        this._verifyRecipientEndorsement(recipientEndorsement, recipientEndorsementSignature);
       }
     }
 
@@ -359,6 +360,30 @@ export default class Verifier {
     );
 
   }
+
+  async _verifyRecipientEndorsement(endorsement, signature) {
+
+    // TODO: Inspectors do not use the step to inform about errors, so step
+    //       errored will always be the blockcerts one.
+    // Compute local hash
+    let localHash = await this._doAsyncAction(
+        SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
+        async () =>
+            inspectors.computeLocalHash(endorsement, this.version)
+    );
+
+    // Compare hashes
+    this._doAction(SUB_STEPS.checkRecipientEndorsementCompareHashes, () =>
+        inspectors.ensureHashesEqual(localHash, signature.targetHash)
+    );
+
+    // Check receipt
+    this._doAction(SUB_STEPS.checkRecipientEndorsementCheckReceipt, () =>
+        inspectors.ensureValidReceipt(signature)
+    );
+
+  }
+
   static _findEDSEndorsement(assertion, endorsements) {
     return this._findEndorsementByClaimType(
         assertion,
