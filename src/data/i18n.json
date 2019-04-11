@@ -36,7 +36,15 @@
       "checkExpiresDateLabel": "Check Expiration Date",
       "checkExpiresDateLabelPending": "Checking Expiration Date",
       "checkOfficialValidationIsPresentLabel": "Check Officialization Requirement",
-      "checkOfficialValidationIsPresentLabelPending": "Checking if the certificate requires officialization"
+      "checkOfficialValidationIsPresentLabelPending": "Checking if the certificate requires officialization",
+      "checkOfficialValidationComputeLocalHashLabel": "Compute official validation local hash",
+      "checkOfficialValidationComputeLocalHashLabelPending": "Computing official validation local hash",
+      "checkOfficialValidationCompareHashesLabel": "Compute official validation compare hashes",
+      "checkOfficialValidationCompareHashesLabelPending": "Computing official validation comparing hashes",
+      "checkOfficialValidationCheckReceiptLabel": "Check official validation Receipt",
+      "checkOfficialValidationCheckReceiptLabelPending": "Checking official validation Receipt",
+      "checkOfficialValidationMinistryIdentityLabel": "Check official validation ministry's identity",
+      "checkOfficialValidationMinistryIdentityLabelPending": "Checking official validation ministry's identity"
     },
     "revocation": {
       "preReason": "Reason given:",
@@ -74,7 +82,8 @@
       "ensureValidReceipt": "The receipt is malformed. There was a problem navigating the merkle tree in the receipt.",
       "invalidMerkleReceipt": "Invalid Merkle Receipt. Proof hash did not match Merkle root",
       "isTransactionIdValid": "Cannot verify this certificate without a transaction ID to compare against.",
-      "ensureOfficializationIsPresent": "The certificate must be approved by the ministry and does not have the seal of approval."
+      "ensureOfficializationIsPresent": "The certificate must be approved by the ministry and does not have the seal of approval.",
+      "ensureMinistryIdentityIsVerified": "The certificate's ministry approval was not sealed by a verified identity of the Ministry"
     }
   },
   "es-ES": {

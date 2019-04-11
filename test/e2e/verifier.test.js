@@ -206,4 +206,12 @@ describe('End-to-end verification', function () {
       expect(result.status).toBe(VERIFICATION_STATUSES.SUCCESS);
     });
   });
+
+  describe('given the certificate is a valid cowcerts', function () {
+    it('should verify successfully', async function () {
+      const certificate = new Certificate(FIXTURES.CowcertsMockValid);
+      const result = await certificate.verify();
+      expect(result.status).toBe(VERIFICATION_STATUSES.SUCCESS);
+    });
+  });
 });

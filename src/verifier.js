@@ -17,6 +17,7 @@ export default class Verifier {
     this.revocationKey = revocationKey;
     this.version = version;
     this.transactionId = transactionId;
+    this.fullCertificate = JSON.parse(JSON.stringify(certificateJson));
 
     let document = certificateJson.document;
     if (!document) {
@@ -246,11 +247,76 @@ export default class Verifier {
     );
 
     // Check official validation
-    if(this.documentToVerify.badge.official) {
+    if(this.fullCertificate.badge.official) {
+
+      // Endorsement is present
       this._doAction(SUB_STEPS.checkOfficialValidationIsPresent, () =>
-          inspectors.ensureOfficializationIsPresent(this.documentToVerify)
+          inspectors.ensureOfficializationIsPresent(this.fullCertificate)
       );
+
+      // Verify endorsement
+      let [officialValidationEndorsement, officialValidationSignature] =
+          Verifier._getOfficialValidationEndorsement(
+              this.fullCertificate);
+
+      await this._verifyEndorsement(
+          officialValidationEndorsement,
+          officialValidationSignature);
+
+      // Verify ministry's identity
+      // TODO: Move to main verification (that has the tx loaded)
+      // this._doAction(SUB_STEPS.checkOfficialValidationMinistryIdentity, () =>
+      //     inspectors.ensureMinistryIdentityIsVerified(signature.anchors[0].sourceId)
+      // );
     }
+
+  }
+
+  /**
+   * Adds the context of the assertion into the endorsement
+   *
+   * @param endorsement
+   * @param assertion
+   * @returns endorsement
+   */
+  static _addContext(endorsement, assertion) {
+    endorsement['@context'] = assertion['@context'];
+    return endorsement;
+  }
+
+  static _removeSignature(document) {
+    delete document['signature'];
+    return document;
+  }
+
+  static _getOfficialValidationEndorsement(assertion) {
+    let signature = assertion.officialValidation.signature;
+    let endorsement = this._removeSignature(this._addContext(
+        assertion.officialValidation,
+        assertion));
+    return [endorsement, signature];
+  }
+
+  async _verifyEndorsement(endorsement, signature) {
+
+    // TODO: Inspectors do not use the step to inform about errors, so step
+    //       errored will always be the blockcerts one.
+    // Compute local hash
+    let localHash = await this._doAsyncAction(
+        SUB_STEPS.checkOfficialValidationComputeLocalHash,
+        async () =>
+            inspectors.computeLocalHash(endorsement, this.version)
+    );
+
+    // Compare hashes
+    this._doAction(SUB_STEPS.checkOfficialValidationCompareHashes, () =>
+        inspectors.ensureHashesEqual(localHash, signature.targetHash)
+    );
+
+    // Check receipt
+    this._doAction(SUB_STEPS.checkOfficialValidationCheckReceipt, () =>
+        inspectors.ensureValidReceipt(signature)
+    );
 
   }
 

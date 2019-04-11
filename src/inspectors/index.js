@@ -8,6 +8,7 @@ import ensureValidIssuingKey from './ensureValidIssuingKey';
 import ensureValidReceipt from './ensureValidReceipt';
 import isTransactionIdValid from './isTransactionIdValid';
 import ensureOfficializationIsPresent from './ensureOfficializationIsPresent';
+import ensureMinistryIdentityIsVerified from './ensureMinistryIdentityIsVerified';
 
 export {
   computeLocalHash,
@@ -19,5 +20,6 @@ export {
   ensureValidIssuingKey,
   ensureValidReceipt,
   isTransactionIdValid,
-  ensureOfficializationIsPresent
+  ensureOfficializationIsPresent,
+  ensureMinistryIdentityIsVerified,
 };

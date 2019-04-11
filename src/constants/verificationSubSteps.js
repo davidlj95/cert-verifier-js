@@ -14,6 +14,10 @@ const checkAuthenticity = 'checkAuthenticity';
 const checkRevokedStatus = 'checkRevokedStatus';
 const checkExpiresDate = 'checkExpiresDate';
 const checkOfficialValidationIsPresent = 'checkOfficialValidationIsPresent';
+const checkOfficialValidationComputeLocalHash = 'checkOfficialValidationComputeLocalHash';
+const checkOfficialValidationCompareHashes = 'checkOfficialValidationCompareHashes';
+const checkOfficialValidationCheckReceipt = 'checkOfficialValidationCheckReceipt';
+const checkOfficialValidationMinistryIdentity = 'checkOfficialValidationMinistryIdentity';
 
 function getTextFor (subStep, status) {
   return i18n['en-US'].subSteps[`${subStep}${status}`];
@@ -26,7 +30,13 @@ const subStepsMap = {
   [STEPS.formatValidation]: [getTransactionId, computeLocalHash, fetchRemoteHash, getIssuerProfile, parseIssuerKeys],
   [STEPS.hashComparison]: [compareHashes, checkMerkleRoot, checkReceipt],
   [STEPS.statusCheck]: [checkIssuerSignature, checkAuthenticity, checkRevokedStatus, checkExpiresDate],
-  [STEPS.officialCheck]: [checkOfficialValidationIsPresent]
+  [STEPS.officialCheck]: [
+    checkOfficialValidationIsPresent,
+    checkOfficialValidationComputeLocalHash,
+    checkOfficialValidationCompareHashes,
+    checkOfficialValidationCheckReceipt,
+    checkOfficialValidationMinistryIdentity
+  ]
 };
 
 function generateSubsteps (parentKey) {
@@ -59,5 +69,9 @@ export {
   checkRevokedStatus,
   checkExpiresDate,
   checkOfficialValidationIsPresent,
+  checkOfficialValidationComputeLocalHash,
+  checkOfficialValidationCompareHashes,
+  checkOfficialValidationCheckReceipt,
+  checkOfficialValidationMinistryIdentity,
   language
 };
