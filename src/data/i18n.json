@@ -8,7 +8,9 @@
       "statusCheckLabel": "Status check",
       "statusCheckLabelPending": "Checking record status",
       "officialCheckLabel": "Official ministry validation",
-      "officialCheckLabelPending": "Checking ministry approval"
+      "officialCheckLabelPending": "Checking ministry approval",
+      "edsCheckLabel": "European Diploma Supplement validation",
+      "edsCheckLabelPending": "Checking EDS document"
     },
     "subSteps": {
       "getTransactionIdLabel": "Get transaction ID",
@@ -44,7 +46,13 @@
       "checkOfficialValidationCheckReceiptLabel": "Check official validation Receipt",
       "checkOfficialValidationCheckReceiptLabelPending": "Checking official validation Receipt",
       "checkOfficialValidationMinistryIdentityLabel": "Check official validation ministry's identity",
-      "checkOfficialValidationMinistryIdentityLabelPending": "Checking official validation ministry's identity"
+      "checkOfficialValidationMinistryIdentityLabelPending": "Checking official validation ministry's identity",
+      "checkEDSEndorsementComputeLocalHashLabel": "Compute EDS endorsement local hash",
+      "checkEDSEndorsementComputeLocalHashLabelPending": "Computing EDS endorsement local hash",
+      "checkEDSEndorsementCompareHashesLabel": "Compute EDS endorsement compare hashes",
+      "checkEDSEndorsementCompareHashesLabelPending": "Computing EDS endorsement comparing hashes",
+      "checkEDSEndorsementCheckReceiptLabel": "Check EDS endorsement Receipt",
+      "checkEDSEndorsementCheckReceiptLabelPending": "Checking EDS endorsement Receipt"
     },
     "revocation": {
       "preReason": "Reason given:",

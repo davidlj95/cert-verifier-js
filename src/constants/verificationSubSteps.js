@@ -18,6 +18,9 @@ const checkOfficialValidationComputeLocalHash = 'checkOfficialValidationComputeL
 const checkOfficialValidationCompareHashes = 'checkOfficialValidationCompareHashes';
 const checkOfficialValidationCheckReceipt = 'checkOfficialValidationCheckReceipt';
 const checkOfficialValidationMinistryIdentity = 'checkOfficialValidationMinistryIdentity';
+const checkEDSEndorsementComputeLocalHash = 'checkEDSEndorsementComputeLocalHash';
+const checkEDSEndorsementCompareHashes = 'checkEDSEndorsementCompareHashes';
+const checkEDSEndorsementCheckReceipt = 'checkEDSEndorsementCheckReceipt';
 
 function getTextFor (subStep, status) {
   return i18n['en-US'].subSteps[`${subStep}${status}`];
@@ -36,6 +39,11 @@ const subStepsMap = {
     checkOfficialValidationCompareHashes,
     checkOfficialValidationCheckReceipt,
     checkOfficialValidationMinistryIdentity
+  ],
+  [STEPS.edsCheck]: [
+    checkEDSEndorsementComputeLocalHash,
+    checkEDSEndorsementCompareHashes,
+    checkEDSEndorsementCheckReceipt
   ]
 };
 
@@ -73,5 +81,8 @@ export {
   checkOfficialValidationCompareHashes,
   checkOfficialValidationCheckReceipt,
   checkOfficialValidationMinistryIdentity,
+  checkEDSEndorsementComputeLocalHash,
+  checkEDSEndorsementCompareHashes,
+  checkEDSEndorsementCheckReceipt,
   language
 };
