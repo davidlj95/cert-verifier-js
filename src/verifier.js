@@ -247,6 +247,7 @@ export default class Verifier {
     );
 
     // Check official validation
+    // TODO: If not official, should dispatch a SUCCESS
     if(this.fullCertificate.badge.official) {
 
       // Endorsement is present
@@ -275,17 +276,12 @@ export default class Verifier {
 
       let extraEndorsements = this.fullCertificate.signature.endorsements;
 
-      let edsEndorsementAndSig = Verifier._findEDSEndorsement(this.fullCertificate, extraEndorsements);
-      if(edsEndorsementAndSig) {
-        let [edsEndorsement, edsEndorsementSignature] = edsEndorsementAndSig;
-        this._verifyEDSEndorsement(edsEndorsement, edsEndorsementSignature);
-      }
+      let recipientEndorsement = Verifier._findRecipientEndorsement(this.fullCertificate, extraEndorsements);
+      await this._verifyRecipientEndorsement(this.fullCertificate, recipientEndorsement);
 
-      let recipientEndorsementAndSig = Verifier._findRecipientEndorsement(this.fullCertificate, extraEndorsements);
-      if(recipientEndorsementAndSig) {
-        let [recipientEndorsement, recipientEndorsementSignature] = recipientEndorsementAndSig;
-        this._verifyRecipientEndorsement(recipientEndorsement, recipientEndorsementSignature);
-      }
+      let edsEndorsement = Verifier._findEDSEndorsement(this.fullCertificate, extraEndorsements);
+      await this._verifyEDSEndorsement(this.fullCertificate, edsEndorsement);
+
     }
 
   }
@@ -338,16 +334,28 @@ export default class Verifier {
 
   }
 
-  async _verifyEDSEndorsement(endorsement, signature) {
+  async _verifyEDSEndorsement(assertion, endorsement) {
 
     // TODO: Inspectors do not use the step to inform about errors, so step
     //       errored will always be the blockcerts one.
+    // Check is present
+    let isPresent = this._doAction(SUB_STEPS.checkEDSEndorsementIsPresent, () =>
+      inspectors.checkEDSEndorsementIsPresent(endorsement)
+    );
+
+    // Break if not present
+    if(!isPresent)
+      return;
+
     // Compute local hash
+    let signature = endorsement.signature;
+    delete endorsement['signature'];
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkEDSEndorsementComputeLocalHash,
         async () =>
             inspectors.computeLocalHash(endorsement, this.version)
     );
+
 
     // Compare hashes
     this._doAction(SUB_STEPS.checkEDSEndorsementCompareHashes, () =>
@@ -361,10 +369,18 @@ export default class Verifier {
 
   }
 
-  async _verifyRecipientEndorsement(endorsement, signature) {
+  async _verifyRecipientEndorsement(assertion, endorsement) {
 
     // TODO: Inspectors do not use the step to inform about errors, so step
     //       errored will always be the blockcerts one.
+    // Check is present
+    this._doAction(SUB_STEPS.checkRecipientEndorsementIsPresent, () =>
+      inspectors.ensureRecipientEndorsementIsPresent(endorsement)
+    );
+
+    let signature = endorsement.signature;
+    delete endorsement['signature'];
+
     // Compute local hash
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
@@ -399,21 +415,29 @@ export default class Verifier {
   }
 
   static _findEndorsementByClaimType(assertion, endorsements, claimType) {
-    let endorsement = null;
-    endorsements.forEach(function (e) {
+    let guessedEndorsement = null;
+    for(let i = 0; i<endorsements.length; i++) {
 
-      if(!e.claim instanceof Object)
+      let currentEndorsement = endorsements[i];
+
+      if(!currentEndorsement.claim instanceof Object)
         return;
 
-      if(e.claim.type === claimType
-          || (e.claim.type instanceof Array && e.claim.type.includes(claimType))
+      if(currentEndorsement.claim.type === claimType
+          || (currentEndorsement.claim.type instanceof Array &&
+              currentEndorsement.claim.type.includes(claimType))
       ) {
-        endorsement = e;
+        guessedEndorsement = currentEndorsement;
+        break;
       }
-    });
-    if(endorsement) {
-      let signature = endorsement['signature'];
-      return [this._removeSignature(this._addContext(endorsement, assertion)), signature];
+    };
+    if(guessedEndorsement && guessedEndorsement instanceof Object) {
+      let signature = guessedEndorsement['signature'];
+      let endorsement = this._removeSignature(
+          this._addContext(guessedEndorsement, assertion)
+      );
+      endorsement.signature = signature;
+      return endorsement;
     }
     return null;
   }

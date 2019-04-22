@@ -22,15 +22,20 @@ const versionVerificationMap = {
     SUB_STEPS.checkReceipt,
     SUB_STEPS.checkExpiresDate,
     SUB_STEPS.checkOfficialValidationIsPresent,
+    // SUB_STEPS.checkOfficialValidationIsForCurrentAssertion,
     SUB_STEPS.checkOfficialValidationComputeLocalHash,
     SUB_STEPS.checkOfficialValidationCompareHashes,
     SUB_STEPS.checkOfficialValidationCheckReceipt,
-    SUB_STEPS.checkEDSEndorsementComputeLocalHash,
-    SUB_STEPS.checkEDSEndorsementCompareHashes,
-    SUB_STEPS.checkEDSEndorsementCheckReceipt,
+    SUB_STEPS.checkRecipientEndorsementIsPresent,
+    // SUB_STEPS.checkRecipientEndorsementIsForCurrentAssertion,
     SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
     SUB_STEPS.checkRecipientEndorsementCompareHashes,
-    SUB_STEPS.checkRecipientEndorsementCheckReceipt
+    SUB_STEPS.checkRecipientEndorsementCheckReceipt,
+    SUB_STEPS.checkEDSEndorsementIsPresent,
+    // SUB_STEPS.checkEDSEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkEDSEndorsementComputeLocalHash,
+    SUB_STEPS.checkEDSEndorsementCompareHashes,
+    SUB_STEPS.checkEDSEndorsementCheckReceipt
   ]
 };
 

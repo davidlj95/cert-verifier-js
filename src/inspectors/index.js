@@ -9,6 +9,8 @@ import ensureValidReceipt from './ensureValidReceipt';
 import isTransactionIdValid from './isTransactionIdValid';
 import ensureOfficializationIsPresent from './ensureOfficializationIsPresent';
 import ensureMinistryIdentityIsVerified from './ensureMinistryIdentityIsVerified';
+import ensureRecipientEndorsementIsPresent from './ensureRecipientEndorsementIsPresent';
+import checkEDSEndorsementIsPresent from './checkEDSEndorsementIsPresent';
 
 export {
   computeLocalHash,
@@ -22,4 +24,6 @@ export {
   isTransactionIdValid,
   ensureOfficializationIsPresent,
   ensureMinistryIdentityIsVerified,
+  ensureRecipientEndorsementIsPresent,
+  checkEDSEndorsementIsPresent
 };

@@ -14,16 +14,21 @@ const checkAuthenticity = 'checkAuthenticity';
 const checkRevokedStatus = 'checkRevokedStatus';
 const checkExpiresDate = 'checkExpiresDate';
 const checkOfficialValidationIsPresent = 'checkOfficialValidationIsPresent';
+const checkOfficialValidationIsForCurrentAssertion = 'checkOfficialValidationIsForCurrentAssertion';
 const checkOfficialValidationComputeLocalHash = 'checkOfficialValidationComputeLocalHash';
 const checkOfficialValidationCompareHashes = 'checkOfficialValidationCompareHashes';
 const checkOfficialValidationCheckReceipt = 'checkOfficialValidationCheckReceipt';
 const checkOfficialValidationMinistryIdentity = 'checkOfficialValidationMinistryIdentity';
-const checkEDSEndorsementComputeLocalHash = 'checkEDSEndorsementComputeLocalHash';
-const checkEDSEndorsementCompareHashes = 'checkEDSEndorsementCompareHashes';
-const checkEDSEndorsementCheckReceipt = 'checkEDSEndorsementCheckReceipt';
+const checkRecipientEndorsementIsPresent = 'checkRecipientEndorsementIsPresent';
+const checkRecipientEndorsementIsForCurrentAssertion = 'checkRecipientEndorsementIsForCurrentAssertion';
 const checkRecipientEndorsementComputeLocalHash = 'checkRecipientEndorsementComputeLocalHash';
 const checkRecipientEndorsementCompareHashes = 'checkRecipientEndorsementCompareHashes';
 const checkRecipientEndorsementCheckReceipt = 'checkRecipientEndorsementCheckReceipt';
+const checkEDSEndorsementIsPresent = 'checkEDSEndorsementIsPresent';
+const checkEDSEndorsementIsForCurrentAssertion = 'checkEDSEndorsementIsForCurrentAssertion';
+const checkEDSEndorsementComputeLocalHash = 'checkEDSEndorsementComputeLocalHash';
+const checkEDSEndorsementCompareHashes = 'checkEDSEndorsementCompareHashes';
+const checkEDSEndorsementCheckReceipt = 'checkEDSEndorsementCheckReceipt';
 
 function getTextFor (subStep, status) {
   return i18n['en-US'].subSteps[`${subStep}${status}`];
@@ -38,20 +43,25 @@ const subStepsMap = {
   [STEPS.statusCheck]: [checkIssuerSignature, checkAuthenticity, checkRevokedStatus, checkExpiresDate],
   [STEPS.officialCheck]: [
     checkOfficialValidationIsPresent,
+    checkOfficialValidationIsForCurrentAssertion,
     checkOfficialValidationComputeLocalHash,
     checkOfficialValidationCompareHashes,
     checkOfficialValidationCheckReceipt,
     checkOfficialValidationMinistryIdentity
   ],
-  [STEPS.edsCheck]: [
-    checkEDSEndorsementComputeLocalHash,
-    checkEDSEndorsementCompareHashes,
-    checkEDSEndorsementCheckReceipt
-  ],
   [STEPS.recipientCheck]: [
+    checkRecipientEndorsementIsPresent,
+    checkRecipientEndorsementIsForCurrentAssertion,
     checkRecipientEndorsementComputeLocalHash,
     checkRecipientEndorsementCompareHashes,
     checkRecipientEndorsementCheckReceipt
+  ],
+  [STEPS.edsCheck]: [
+    checkEDSEndorsementIsPresent,
+    checkEDSEndorsementIsForCurrentAssertion,
+    checkEDSEndorsementComputeLocalHash,
+    checkEDSEndorsementCompareHashes,
+    checkEDSEndorsementCheckReceipt
   ]
 };
 
@@ -85,15 +95,20 @@ export {
   checkRevokedStatus,
   checkExpiresDate,
   checkOfficialValidationIsPresent,
+  checkOfficialValidationIsForCurrentAssertion,
   checkOfficialValidationComputeLocalHash,
   checkOfficialValidationCompareHashes,
   checkOfficialValidationCheckReceipt,
   checkOfficialValidationMinistryIdentity,
-  checkEDSEndorsementComputeLocalHash,
-  checkEDSEndorsementCompareHashes,
-  checkEDSEndorsementCheckReceipt,
+  checkRecipientEndorsementIsPresent,
+  checkRecipientEndorsementIsForCurrentAssertion,
   checkRecipientEndorsementComputeLocalHash,
   checkRecipientEndorsementCompareHashes,
   checkRecipientEndorsementCheckReceipt,
+  checkEDSEndorsementIsPresent,
+  checkEDSEndorsementIsForCurrentAssertion,
+  checkEDSEndorsementComputeLocalHash,
+  checkEDSEndorsementCompareHashes,
+  checkEDSEndorsementCheckReceipt,
   language
 };

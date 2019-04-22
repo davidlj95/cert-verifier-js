@@ -14,8 +14,8 @@
     "test:coverage": "jest --maxWorkers=4 --silent --noStackTrace --coverage",
     "test:coverage:report": "codecov",
     "build": "npm run build:esm && npm run build:es5",
-    "build:esm": "rollup -c",
-    "build:es5": "rollup -c rollup-es5.config.js",
+    "build:esm": "npx rollup -c",
+    "build:es5": "npx rollup -c rollup-es5.config.js",
     "lint": "semistandard --verbose | snazzy",
     "prepush": "npm run test && npm run lint",
     "semantic-release": "semantic-release"

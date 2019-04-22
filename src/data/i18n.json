@@ -41,6 +41,8 @@
       "checkExpiresDateLabelPending": "Checking Expiration Date",
       "checkOfficialValidationIsPresentLabel": "Check Officialization Requirement",
       "checkOfficialValidationIsPresentLabelPending": "Checking if the certificate requires officialization",
+      "checkOfficialValidationIsForCurrentAssertionLabel": "Check Officialization found is for current assertion",
+      "checkOfficialValidationIsForCurrentAssertionLabelPending": "Checking if the certificate officialization is for the current assertion",
       "checkOfficialValidationComputeLocalHashLabel": "Compute official validation local hash",
       "checkOfficialValidationComputeLocalHashLabelPending": "Computing official validation local hash",
       "checkOfficialValidationCompareHashesLabel": "Compute official validation compare hashes",
@@ -49,18 +51,26 @@
       "checkOfficialValidationCheckReceiptLabelPending": "Checking official validation Receipt",
       "checkOfficialValidationMinistryIdentityLabel": "Check official validation ministry's identity",
       "checkOfficialValidationMinistryIdentityLabelPending": "Checking official validation ministry's identity",
-      "checkEDSEndorsementComputeLocalHashLabel": "Compute EDS endorsement local hash",
-      "checkEDSEndorsementComputeLocalHashLabelPending": "Computing EDS endorsement local hash",
-      "checkEDSEndorsementCompareHashesLabel": "Compute EDS endorsement compare hashes",
-      "checkEDSEndorsementCompareHashesLabelPending": "Computing EDS endorsement comparing hashes",
-      "checkEDSEndorsementCheckReceiptLabel": "Check EDS endorsement Receipt",
-      "checkEDSEndorsementCheckReceiptLabelPending": "Checking EDS endorsement Receipt",
+      "checkRecipientEndorsementIsPresentLabel": "Check recipient endorsement is present",
+      "checkRecipientEndorsementIsPresentLabelPending": "Checking if the recipient endorsement is in the certificate",
+      "checkRecipientEndorsementIsForCurrentAssertionLabel": "Check recipient found is for current assertion",
+      "checkRecipientEndorsementIsForCurrentAssertionLabelPending": "Checking if the certificate's recipient is for the current assertion",
       "checkRecipientEndorsementComputeLocalHashLabel": "Compute recipient endorsement local hash",
       "checkRecipientEndorsementComputeLocalHashLabelPending": "Computing recipient endorsement local hash",
       "checkRecipientEndorsementCompareHashesLabel": "Compute recipient endorsement compare hashes",
       "checkRecipientEndorsementCompareHashesLabelPending": "Computing recipient endorsement comparing hashes",
       "checkRecipientEndorsementCheckReceiptLabel": "Check recipient endorsement Receipt",
-      "checkRecipientEndorsementCheckReceiptLabelPending": "Checking recipient endorsement Receipt"
+      "checkRecipientEndorsementCheckReceiptLabelPending": "Checking recipient endorsement Receipt",
+      "checkEDSEndorsementIsPresentLabel": "Check EDS endorsement is present",
+      "checkEDSEndorsementIsPresentLabelPending": "Checking if the EDS endorsement is in the certificate",
+      "checkEDSEndorsementIsForCurrentAssertionLabel": "Check EDS found is for current assertion",
+      "checkEDSEndorsementIsForCurrentAssertionLabelPending": "Checking if the certificate's EDS is for the current assertion",
+      "checkEDSEndorsementComputeLocalHashLabel": "Compute EDS endorsement local hash",
+      "checkEDSEndorsementComputeLocalHashLabelPending": "Computing EDS endorsement local hash",
+      "checkEDSEndorsementCompareHashesLabel": "Compute EDS endorsement compare hashes",
+      "checkEDSEndorsementCompareHashesLabelPending": "Computing EDS endorsement comparing hashes",
+      "checkEDSEndorsementCheckReceiptLabel": "Check EDS endorsement Receipt",
+      "checkEDSEndorsementCheckReceiptLabelPending": "Checking EDS endorsement Receipt"
     },
     "revocation": {
       "preReason": "Reason given:",
@@ -99,7 +109,8 @@
       "invalidMerkleReceipt": "Invalid Merkle Receipt. Proof hash did not match Merkle root",
       "isTransactionIdValid": "Cannot verify this certificate without a transaction ID to compare against.",
       "ensureOfficializationIsPresent": "The certificate must be approved by the ministry and does not have the seal of approval.",
-      "ensureMinistryIdentityIsVerified": "The certificate's ministry approval was not sealed by a verified identity of the Ministry"
+      "ensureMinistryIdentityIsVerified": "The certificate's ministry approval was not sealed by a verified identity of the Ministry",
+      "ensureRecipientEndorsementIsPresent": "The certificate's recipient identity has not been verified."
     }
   },
   "es-ES": {

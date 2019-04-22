@@ -27,16 +27,16 @@ const language = {
     labelPending: 'Checking if the record has been officialized',
     subSteps: []
   },
-  [edsCheck]: {
-    label: 'EDS check',
-    labelPending: 'Checking if the record\'s EDS check',
-    subSteps: []
-  },
   [recipientCheck]: {
     label: 'Recipient check',
     labelPending: 'Checking if the record\'s recipient check',
     subSteps: []
-}
+  },
+  [edsCheck]: {
+    label: 'EDS check',
+    labelPending: 'Checking if the record\'s EDS check',
+    subSteps: []
+  }
 };
 
 export { final, formatValidation, hashComparison, statusCheck, officialCheck, edsCheck, recipientCheck, language };
