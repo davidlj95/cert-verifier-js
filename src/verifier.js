@@ -388,7 +388,7 @@ export default class Verifier {
     return this._findEndorsementByClaimType(
         assertion,
         endorsements,
-        "SEDClaim")
+        "EDSClaim")
   }
 
   static _findRecipientEndorsement(assertion, endorsements) {
