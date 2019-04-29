@@ -1,6 +1,8 @@
 import { NETWORKS, STEPS, SUB_STEPS } from '../../../constants';
 import chainsService from '../../chains';
 import { getText } from '../../i18n/useCases';
+import isOfficial from "./isOfficial";
+import {getEDSEndorsement, getRecipientEndorsement} from "./index";
 
 const versionVerificationMap = {
   [NETWORKS.mainnet]: [
@@ -21,17 +23,49 @@ const versionVerificationMap = {
     SUB_STEPS.compareHashes,
     SUB_STEPS.checkReceipt,
     SUB_STEPS.checkExpiresDate,
+  ]
+};
+
+const officialValidationVerificationMap = {
+  [NETWORKS.mainnet]: [
     SUB_STEPS.checkOfficialValidationIsPresent,
     // SUB_STEPS.checkOfficialValidationIsForCurrentAssertion,
     SUB_STEPS.checkOfficialValidationComputeLocalHash,
     SUB_STEPS.checkOfficialValidationCompareHashes,
     SUB_STEPS.checkOfficialValidationCheckReceipt,
-    SUB_STEPS.checkRecipientEndorsementIsPresent,
+  ],
+  [NETWORKS.testnet]: [
+    SUB_STEPS.checkOfficialValidationIsPresent,
+    // SUB_STEPS.checkOfficialValidationIsForCurrentAssertion,
+    SUB_STEPS.checkOfficialValidationComputeLocalHash,
+    SUB_STEPS.checkOfficialValidationCompareHashes,
+    SUB_STEPS.checkOfficialValidationCheckReceipt
+  ]
+};
+
+const recipientEndorsementVerificationMap = {
+  [NETWORKS.mainnet]: [
     // SUB_STEPS.checkRecipientEndorsementIsForCurrentAssertion,
     SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
     SUB_STEPS.checkRecipientEndorsementCompareHashes,
     SUB_STEPS.checkRecipientEndorsementCheckReceipt,
-    SUB_STEPS.checkEDSEndorsementIsPresent,
+  ],
+  [NETWORKS.testnet]: [
+    // SUB_STEPS.checkRecipientEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
+    SUB_STEPS.checkRecipientEndorsementCompareHashes,
+    SUB_STEPS.checkRecipientEndorsementCheckReceipt,
+  ]
+};
+
+const edsEndorsementVerificationMap = {
+  [NETWORKS.mainnet]: [
+    // SUB_STEPS.checkEDSEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkEDSEndorsementComputeLocalHash,
+    SUB_STEPS.checkEDSEndorsementCompareHashes,
+    SUB_STEPS.checkEDSEndorsementCheckReceipt
+  ],
+  [NETWORKS.testnet]: [
     // SUB_STEPS.checkEDSEndorsementIsForCurrentAssertion,
     SUB_STEPS.checkEDSEndorsementComputeLocalHash,
     SUB_STEPS.checkEDSEndorsementCompareHashes,
@@ -69,6 +103,13 @@ function stepsObjectToArray (stepsObject) {
 function setSubStepsToSteps (subSteps) {
   const steps = JSON.parse(JSON.stringify(STEPS.language));
   subSteps.forEach(subStep => steps[subStep.parentStep].subSteps.push(subStep));
+
+  // Remove empty steps
+  for(const [stepKey, stepValue] of Object.entries(steps)) {
+    if(stepValue.subSteps.length === 0)
+      delete steps[stepKey];
+  }
+
   return steps;
 }
 
@@ -101,14 +142,41 @@ function getFullStepsFromSubSteps (subStepMap) {
  * Get verification map from the chain
  *
  * @param chain
+ * @param certificate Full JSON certificate
  * @returns {Array}
  */
-export default function getVerificationMap (chain) {
+export default function getVerificationMap (chain, certificate) {
   if (!chain) {
     return [];
   }
 
   let network = chainsService.isMockChain(chain) ? NETWORKS.testnet : NETWORKS.mainnet;
+  return getFullStepsFromSubSteps(getVerificationSubstepsFromNetwork(network, certificate));
+}
+
+/**
+ * getVerificationSubstepsFromNetwork
+ *
+ * Returns the verification substeps given the network
+ */
+function getVerificationSubstepsFromNetwork(network, certificate) {
   const verificationMap = Object.assign(versionVerificationMap);
-  return getFullStepsFromSubSteps(verificationMap[network]);
+  let basicSubsteps = verificationMap[network];
+
+  // Official verification
+  if(isOfficial(certificate)) {
+    basicSubsteps = basicSubsteps.concat(officialValidationVerificationMap[network]);
+  }
+
+  // Recipient endorsement
+  if(!!getRecipientEndorsement(certificate)) {
+    basicSubsteps = basicSubsteps.concat(recipientEndorsementVerificationMap[network]);
+  }
+
+  // EDS endorsement
+  if(!!getEDSEndorsement(certificate)) {
+    basicSubsteps = basicSubsteps.concat(edsEndorsementVerificationMap[network]);
+  }
+
+  return basicSubsteps
 }

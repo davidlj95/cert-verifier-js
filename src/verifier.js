@@ -4,6 +4,11 @@ import CERTIFICATE_VERSIONS from './constants/certificateVersions';
 import VerifierError from './models/verifierError';
 import domain from './domain';
 import * as inspectors from './inspectors';
+import {
+  isOfficial,
+  getOfficialValidationEndorsement,
+  getAdditionalEndorsements, getRecipientEndorsement, getEDSEndorsement
+} from "./domain/certificates/useCases";
 
 const log = debug('Verifier');
 
@@ -247,8 +252,7 @@ export default class Verifier {
     );
 
     // Check official validation
-    // TODO: If not official, should dispatch a SUCCESS
-    if(this.fullCertificate.badge.official) {
+    if(isOfficial(this.fullCertificate)) {
 
       // Endorsement is present
       this._doAction(SUB_STEPS.checkOfficialValidationIsPresent, () =>
@@ -256,13 +260,14 @@ export default class Verifier {
       );
 
       // Verify endorsement
-      let [officialValidationEndorsement, officialValidationSignature] =
-          Verifier._getOfficialValidationEndorsement(
-              this.fullCertificate);
+      let officialValidationEndorsement = getOfficialValidationEndorsement(
+          this.fullCertificate);
 
       await this._verifyOfficialValidation(
-          officialValidationEndorsement,
-          officialValidationSignature);
+          ...Verifier._endorsementToDocumentAndSignature(
+              officialValidationEndorsement, this.fullCertificate
+          )
+      );
 
       // Verify ministry's identity
       // TODO: Move to main verification (that has the tx loaded)
@@ -272,15 +277,22 @@ export default class Verifier {
     }
 
     // Check extra endorsements
-    if(this.fullCertificate.signature.endorsements) {
+    let extraEndorsements = getAdditionalEndorsements(this.fullCertificate);
+    if(extraEndorsements) {
 
-      let extraEndorsements = this.fullCertificate.signature.endorsements;
+      let recipientEndorsement = getRecipientEndorsement(this.fullCertificate);
+      if(recipientEndorsement)
+        await this._verifyRecipientEndorsement(
+            ...Verifier._endorsementToDocumentAndSignature(
+                recipientEndorsement, this.fullCertificate)
+        );
 
-      let recipientEndorsement = Verifier._findRecipientEndorsement(this.fullCertificate, extraEndorsements);
-      await this._verifyRecipientEndorsement(this.fullCertificate, recipientEndorsement);
-
-      let edsEndorsement = Verifier._findEDSEndorsement(this.fullCertificate, extraEndorsements);
-      await this._verifyEDSEndorsement(this.fullCertificate, edsEndorsement);
+      let edsEndorsement = getEDSEndorsement(this.fullCertificate);
+      if(edsEndorsement)
+        await this._verifyEDSEndorsement(
+            ...Verifier._endorsementToDocumentAndSignature(
+                edsEndorsement, this.fullCertificate)
+        );
 
     }
 
@@ -298,148 +310,89 @@ export default class Verifier {
     return endorsement;
   }
 
+
+  /**
+   * Removes the document signature
+   *
+   * @param document
+   * @returns {*}
+   * @private
+   */
   static _removeSignature(document) {
     delete document['signature'];
     return document;
   }
 
-  static _getOfficialValidationEndorsement(assertion) {
-    let signature = assertion.officialValidation.signature;
-    let endorsement = this._removeSignature(this._addContext(
-        assertion.officialValidation,
-        assertion));
-    return [endorsement, signature];
+  static _endorsementToDocumentAndSignature(endorsement, certificate)  {
+    const signature = endorsement.signature;
+    const endorsementWithContextButNoSignature = Verifier._removeSignature(
+        Verifier._addContext(endorsement, certificate)
+    );
+    return [endorsementWithContextButNoSignature, signature];
   }
 
   async _verifyOfficialValidation(endorsement, signature) {
 
-    // TODO: Inspectors do not use the step to inform about errors, so step
-    //       errored will always be the blockcerts one.
     // Compute local hash
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkOfficialValidationComputeLocalHash,
         async () =>
-            inspectors.computeLocalHash(endorsement, this.version)
+            inspectors.computeLocalHash(endorsement, this.version, SUB_STEPS.checkOfficialValidationComputeLocalHash)
     );
 
     // Compare hashes
     this._doAction(SUB_STEPS.checkOfficialValidationCompareHashes, () =>
-        inspectors.ensureHashesEqual(localHash, signature.targetHash)
+        inspectors.ensureHashesEqual(localHash, signature.targetHash, SUB_STEPS.checkOfficialValidationCompareHashes)
     );
 
     // Check receipt
     this._doAction(SUB_STEPS.checkOfficialValidationCheckReceipt, () =>
-        inspectors.ensureValidReceipt(signature)
+        inspectors.ensureValidReceipt(signature, SUB_STEPS.checkOfficialValidationCheckReceipt)
     );
 
   }
 
-  async _verifyEDSEndorsement(assertion, endorsement) {
-
-    // TODO: Inspectors do not use the step to inform about errors, so step
-    //       errored will always be the blockcerts one.
-    // Check is present
-    let isPresent = this._doAction(SUB_STEPS.checkEDSEndorsementIsPresent, () =>
-      inspectors.checkEDSEndorsementIsPresent(endorsement)
-    );
-
-    // Break if not present
-    if(!isPresent)
-      return;
+  async _verifyEDSEndorsement(endorsement, signature) {
 
     // Compute local hash
-    let signature = endorsement.signature;
-    delete endorsement['signature'];
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkEDSEndorsementComputeLocalHash,
         async () =>
-            inspectors.computeLocalHash(endorsement, this.version)
+            inspectors.computeLocalHash(endorsement, this.version, SUB_STEPS.checkEDSEndorsementComputeLocalHash)
     );
 
 
     // Compare hashes
     this._doAction(SUB_STEPS.checkEDSEndorsementCompareHashes, () =>
-        inspectors.ensureHashesEqual(localHash, signature.targetHash)
+        inspectors.ensureHashesEqual(localHash, signature.targetHash, SUB_STEPS.checkEDSEndorsementCompareHashes)
     );
 
     // Check receipt
     this._doAction(SUB_STEPS.checkEDSEndorsementCheckReceipt, () =>
-        inspectors.ensureValidReceipt(signature)
+        inspectors.ensureValidReceipt(signature, SUB_STEPS.checkEDSEndorsementCheckReceipt)
     );
 
   }
 
-  async _verifyRecipientEndorsement(assertion, endorsement) {
-
-    // TODO: Inspectors do not use the step to inform about errors, so step
-    //       errored will always be the blockcerts one.
-    // Check is present
-    this._doAction(SUB_STEPS.checkRecipientEndorsementIsPresent, () =>
-      inspectors.ensureRecipientEndorsementIsPresent(endorsement)
-    );
-
-    let signature = endorsement.signature;
-    delete endorsement['signature'];
+  async _verifyRecipientEndorsement(endorsement, signature) {
 
     // Compute local hash
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
         async () =>
-            inspectors.computeLocalHash(endorsement, this.version)
+            inspectors.computeLocalHash(endorsement, this.version, SUB_STEPS.checkRecipientEndorsementComputeLocalHash)
     );
 
     // Compare hashes
     this._doAction(SUB_STEPS.checkRecipientEndorsementCompareHashes, () =>
-        inspectors.ensureHashesEqual(localHash, signature.targetHash)
+        inspectors.ensureHashesEqual(localHash, signature.targetHash, SUB_STEPS.checkRecipientEndorsementCompareHashes)
     );
 
     // Check receipt
     this._doAction(SUB_STEPS.checkRecipientEndorsementCheckReceipt, () =>
-        inspectors.ensureValidReceipt(signature)
+        inspectors.ensureValidReceipt(signature, SUB_STEPS.checkRecipientEndorsementCheckReceipt)
     );
 
-  }
-
-  static _findEDSEndorsement(assertion, endorsements) {
-    return this._findEndorsementByClaimType(
-        assertion,
-        endorsements,
-        "EDSClaim")
-  }
-
-  static _findRecipientEndorsement(assertion, endorsements) {
-    return this._findEndorsementByClaimType(
-        assertion,
-        endorsements,
-        "RecipientClaim");
-  }
-
-  static _findEndorsementByClaimType(assertion, endorsements, claimType) {
-    let guessedEndorsement = null;
-    for(let i = 0; i<endorsements.length; i++) {
-
-      let currentEndorsement = endorsements[i];
-
-      if(!currentEndorsement.claim instanceof Object)
-        return;
-
-      if(currentEndorsement.claim.type === claimType
-          || (currentEndorsement.claim.type instanceof Array &&
-              currentEndorsement.claim.type.includes(claimType))
-      ) {
-        guessedEndorsement = currentEndorsement;
-        break;
-      }
-    };
-    if(guessedEndorsement && guessedEndorsement instanceof Object) {
-      let signature = guessedEndorsement['signature'];
-      let endorsement = this._removeSignature(
-          this._addContext(guessedEndorsement, assertion)
-      );
-      endorsement.signature = signature;
-      return endorsement;
-    }
-    return null;
   }
 
   /**;

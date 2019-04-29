@@ -4,7 +4,7 @@ import * as SUB_STEPS from '../constants/verificationSubSteps';
 import { toByteArray } from '../helpers/data';
 import { getText } from '../domain/i18n/useCases';
 
-export default function ensureValidReceipt (receipt) {
+export default function ensureValidReceipt (receipt, substep = SUB_STEPS.checkReceipt) {
   let proofHash = receipt.targetHash;
   const merkleRoot = receipt.merkleRoot;
   try {
@@ -22,7 +22,7 @@ export default function ensureValidReceipt (receipt) {
           proofHash = sha256(appendedBuffer);
         } else {
           throw new VerifierError(
-            SUB_STEPS.checkReceipt,
+            substep,
             'We should never get here.'
           );
         }
@@ -30,14 +30,14 @@ export default function ensureValidReceipt (receipt) {
     }
   } catch (e) {
     throw new VerifierError(
-      SUB_STEPS.checkReceipt,
+      substep,
       getText('errors', 'ensureValidReceipt')
     );
   }
 
   if (proofHash !== merkleRoot) {
     throw new VerifierError(
-      SUB_STEPS.checkReceipt,
+      substep,
       getText('errors', 'invalidMerkleReceipt')
     );
   }

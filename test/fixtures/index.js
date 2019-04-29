@@ -18,6 +18,7 @@ import TestnetV1Valid from './testnet-valid-1.2';
 import TestnetV2Valid from './testnet-valid-2.0';
 import TestnetV2ValidV1Issuer from './testnet-valid-v1-issuer-2.0';
 import CowcertsMockValid from './cowcerts-mock-valid';
+import CowcertsMockValidWithoutEDS from './cowcerts-mock-valid-without-eds';
 
 export default {
   EthereumMainV2Valid,
@@ -39,5 +40,6 @@ export default {
   TestnetV1Valid,
   TestnetV2Valid,
   TestnetV2ValidV1Issuer,
-  CowcertsMockValid
+  CowcertsMockValid,
+  CowcertsMockValidWithoutEDS
 };

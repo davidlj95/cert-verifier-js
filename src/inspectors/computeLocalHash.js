@@ -37,7 +37,7 @@ function getUnmappedFields (normalized) {
   return null;
 }
 
-export default function computeLocalHash (document, version) {
+export default function computeLocalHash (document, version, substep = SUB_STEPS.computeLocalHash) {
   let expandContext = document['@context'];
   const theDocument = document;
   if (version === CERTIFICATE_VERSIONS.V2_0 && CONFIG.CheckForUnmappedFields) {
@@ -72,14 +72,14 @@ export default function computeLocalHash (document, version) {
       const isErr = !!err;
       if (isErr) {
         reject(
-          new VerifierError(SUB_STEPS.computeLocalHash, getText('errors', 'failedJsonLdNormalization'))
+          new VerifierError(substep, getText('errors', 'failedJsonLdNormalization'))
         );
       } else {
         let unmappedFields = getUnmappedFields(normalized);
         if (unmappedFields) {
           reject(
             new VerifierError(
-              SUB_STEPS.computeLocalHash,
+              substep,
               getText('errors', 'foundUnmappedFields')
             )
           ); // + unmappedFields.join(",")
