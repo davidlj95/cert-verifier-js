@@ -29,14 +29,14 @@ const versionVerificationMap = {
 const officialValidationVerificationMap = {
   [NETWORKS.mainnet]: [
     SUB_STEPS.checkOfficialValidationIsPresent,
-    // SUB_STEPS.checkOfficialValidationIsForCurrentAssertion,
+    SUB_STEPS.checkOfficialValidationIsForCurrentCertificate,
     SUB_STEPS.checkOfficialValidationComputeLocalHash,
     SUB_STEPS.checkOfficialValidationCompareHashes,
     SUB_STEPS.checkOfficialValidationCheckReceipt,
   ],
   [NETWORKS.testnet]: [
     SUB_STEPS.checkOfficialValidationIsPresent,
-    // SUB_STEPS.checkOfficialValidationIsForCurrentAssertion,
+    SUB_STEPS.checkOfficialValidationIsForCurrentCertificate,
     SUB_STEPS.checkOfficialValidationComputeLocalHash,
     SUB_STEPS.checkOfficialValidationCompareHashes,
     SUB_STEPS.checkOfficialValidationCheckReceipt
@@ -45,13 +45,13 @@ const officialValidationVerificationMap = {
 
 const recipientEndorsementVerificationMap = {
   [NETWORKS.mainnet]: [
-    // SUB_STEPS.checkRecipientEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkRecipientEndorsementIsForCurrentCertificate,
     SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
     SUB_STEPS.checkRecipientEndorsementCompareHashes,
     SUB_STEPS.checkRecipientEndorsementCheckReceipt,
   ],
   [NETWORKS.testnet]: [
-    // SUB_STEPS.checkRecipientEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkRecipientEndorsementIsForCurrentCertificate,
     SUB_STEPS.checkRecipientEndorsementComputeLocalHash,
     SUB_STEPS.checkRecipientEndorsementCompareHashes,
     SUB_STEPS.checkRecipientEndorsementCheckReceipt,
@@ -60,13 +60,13 @@ const recipientEndorsementVerificationMap = {
 
 const edsEndorsementVerificationMap = {
   [NETWORKS.mainnet]: [
-    // SUB_STEPS.checkEDSEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkEDSEndorsementIsForCurrentCertificate,
     SUB_STEPS.checkEDSEndorsementComputeLocalHash,
     SUB_STEPS.checkEDSEndorsementCompareHashes,
     SUB_STEPS.checkEDSEndorsementCheckReceipt
   ],
   [NETWORKS.testnet]: [
-    // SUB_STEPS.checkEDSEndorsementIsForCurrentAssertion,
+    SUB_STEPS.checkEDSEndorsementIsForCurrentCertificate,
     SUB_STEPS.checkEDSEndorsementComputeLocalHash,
     SUB_STEPS.checkEDSEndorsementCompareHashes,
     SUB_STEPS.checkEDSEndorsementCheckReceipt

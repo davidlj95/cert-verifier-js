@@ -19,6 +19,9 @@ import TestnetV2Valid from './testnet-valid-2.0';
 import TestnetV2ValidV1Issuer from './testnet-valid-v1-issuer-2.0';
 import CowcertsMockValid from './cowcerts-mock-valid';
 import CowcertsMockValidWithoutEDS from './cowcerts-mock-valid-without-eds';
+import CowcertsMockInvalidWrongOfficializationClaimId from './cowcerts-mock-invalid-wrong-officialization-claim-id';
+import CowcertsMockInvalidWrongRecipientClaimId from './cowcerts-mock-invalid-wrong-recipient-claim-id';
+import CowcertsMockInvalidWrongEDSClaimId from './cowcerts-mock-invalid-wrong-eds-claim-id';
 
 export default {
   EthereumMainV2Valid,
@@ -41,5 +44,8 @@ export default {
   TestnetV2Valid,
   TestnetV2ValidV1Issuer,
   CowcertsMockValid,
-  CowcertsMockValidWithoutEDS
+  CowcertsMockValidWithoutEDS,
+  CowcertsMockInvalidWrongOfficializationClaimId,
+  CowcertsMockInvalidWrongRecipientClaimId,
+  CowcertsMockInvalidWrongEDSClaimId
 };

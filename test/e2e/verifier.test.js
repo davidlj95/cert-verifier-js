@@ -221,4 +221,25 @@ describe('End-to-end verification', function () {
       expect(result.status).toBe(VERIFICATION_STATUSES.SUCCESS);
     });
   });
+  describe('given the certificate officialization is not for the current id', function () {
+    it('should fail', async function () {
+      const certificate = new Certificate(FIXTURES.CowcertsMockInvalidWrongOfficializationClaimId);
+      const result = await certificate.verify();
+      expect(result.status).toBe(VERIFICATION_STATUSES.FAILURE);
+    });
+  });
+  describe('given the certificate recipient claim is not for the current id', function () {
+    it('should fail', async function () {
+      const certificate = new Certificate(FIXTURES.CowcertsMockInvalidWrongRecipientClaimId);
+      const result = await certificate.verify();
+      expect(result.status).toBe(VERIFICATION_STATUSES.FAILURE);
+    });
+  });
+  describe('given the certificate EDS claim is not for the current id', function () {
+    it('should fail', async function () {
+      const certificate = new Certificate(FIXTURES.CowcertsMockInvalidWrongEDSClaimId);
+      const result = await certificate.verify();
+      expect(result.status).toBe(VERIFICATION_STATUSES.FAILURE);
+    });
+  });
 });

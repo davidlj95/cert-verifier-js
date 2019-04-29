@@ -333,6 +333,16 @@ export default class Verifier {
 
   async _verifyOfficialValidation(endorsement, signature) {
 
+    // Check is claiming about current certificate
+    this._doAction(SUB_STEPS.checkOfficialValidationIsForCurrentCertificate, () =>
+        inspectors.ensureClaimIsForCurrentCertificate(
+            endorsement.claim,
+            this.id,
+            SUB_STEPS.checkOfficialValidationIsForCurrentCertificate,
+            'ensureOfficialValidationIsForCurrentCertificate'
+        )
+    );
+
     // Compute local hash
     let localHash = await this._doAsyncAction(
         SUB_STEPS.checkOfficialValidationComputeLocalHash,
@@ -353,6 +363,16 @@ export default class Verifier {
   }
 
   async _verifyEDSEndorsement(endorsement, signature) {
+
+    // Check is claiming about current certificate
+    this._doAction(SUB_STEPS.checkEDSEndorsementIsForCurrentCertificate, () =>
+        inspectors.ensureClaimIsForCurrentCertificate(
+            endorsement.claim,
+            this.id,
+            SUB_STEPS.checkEDSEndorsementIsForCurrentCertificate,
+            'ensureEDSEndorsementIsForCurrentCertificate'
+        )
+    );
 
     // Compute local hash
     let localHash = await this._doAsyncAction(
@@ -375,6 +395,16 @@ export default class Verifier {
   }
 
   async _verifyRecipientEndorsement(endorsement, signature) {
+
+    // Check is claiming about current certificate
+    this._doAction(SUB_STEPS.checkRecipientEndorsementIsForCurrentCertificate, () =>
+        inspectors.ensureClaimIsForCurrentCertificate(
+            endorsement.claim,
+            this.id,
+            SUB_STEPS.checkRecipientEndorsementIsForCurrentCertificate,
+            'ensureRecipientEndorsementIsForCurrentCertificate'
+        )
+    );
 
     // Compute local hash
     let localHash = await this._doAsyncAction(
