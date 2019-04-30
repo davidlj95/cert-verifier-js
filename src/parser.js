@@ -1,6 +1,7 @@
 import { CERTIFICATE_VERSIONS } from './constants';
 import domain from './domain';
 import { SignatureImage } from './models';
+import {getOtherChainsFromSignature} from "./domain/certificates/useCases";
 
 /**
  * _getSignatureImages
@@ -122,6 +123,12 @@ function parseV2 (certificateJson) {
   const sealImage = issuer.image;
   const signatureImage = getSignatureImages(badge.signatureLines, version);
 
+  const otherChains = getOtherChainsFromSignature(receipt);
+  let otherChain = null;
+  if(otherChains) {
+    otherChain = otherChains[0].id;
+  }
+
   return {
     certificateImage,
     chain,
@@ -141,7 +148,8 @@ function parseV2 (certificateJson) {
     signature: null,
     signatureImage,
     subtitle,
-    version
+    version,
+    otherChain
   };
 }
 

@@ -96,7 +96,7 @@ export default class Certificate {
    * @param version
    * @private
    */
-  _setProperties ({certificateImage, chain, description, expires, id, isFormatValid, issuedOn, issuer, metadataJson, name, publicKey, receipt, recipientFullName, recordLink, revocationKey, sealImage, signature, signatureImage, subtitle, version}) {
+  _setProperties ({certificateImage, chain, description, expires, id, isFormatValid, issuedOn, issuer, metadataJson, name, publicKey, receipt, recipientFullName, recordLink, revocationKey, sealImage, signature, signatureImage, subtitle, version, otherChain}) {
     this.isFormatValid = isFormatValid;
     this.certificateImage = certificateImage;
     this.chain = chain;
@@ -121,6 +121,7 @@ export default class Certificate {
     this.verificationSteps = domain.certificates.getVerificationMap(chain, this.certificateJson);
 
     this.version = version;
+    this.otherChain = otherChain;
 
     // Transaction ID, link & raw link
     this._setTransactionDetails();

@@ -32,7 +32,8 @@ const versionVerificationMap = {
 
 const certificateOtherChainSubsteps = [
     SUB_STEPS.getOtherChainTransactionId,
-    SUB_STEPS.fetchOtherChainRemoteHash
+    SUB_STEPS.fetchOtherChainRemoteHash,
+    SUB_STEPS.checkOtherChainMerkleRoot
 ];
 
 const officialValidationVerificationMap = {

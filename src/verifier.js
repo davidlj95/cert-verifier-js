@@ -524,5 +524,10 @@ export default class Verifier {
             otherBlockchain.protocol,
             SUB_STEPS.fetchOtherChainRemoteHash)
     );
+
+    // Check merkle root
+    this._doAction(SUB_STEPS.checkOtherChainMerkleRoot, () =>
+        inspectors.ensureMerkleRootEqual(this.receipt.merkleRoot, txData.remoteHash, SUB_STEPS.checkOtherChainMerkleRoot)
+    );
   }
 }
