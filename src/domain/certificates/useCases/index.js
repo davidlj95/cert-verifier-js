@@ -9,6 +9,7 @@ import getAdditionalEndorsements from './getAdditionalEndorsements';
 import getEndorsementByClaimType from './getEndorsementByClaimType';
 import getRecipientEndorsement from './getRecipientEndorsement';
 import getEDSEndorsement from './getEDSEndorsement';
+import getOtherChainsFromSignature from './getOtherChainsFromSignature';
 
 export {
   getChain,
@@ -21,5 +22,6 @@ export {
   getAdditionalEndorsements,
   getEndorsementByClaimType,
   getRecipientEndorsement,
-  getEDSEndorsement
+  getEDSEndorsement,
+  getOtherChainsFromSignature
 };

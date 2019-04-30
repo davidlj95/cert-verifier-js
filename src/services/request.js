@@ -42,6 +42,10 @@ export default function request (obj) {
 
     request.open(obj.method || 'GET', url);
 
+    if(obj.contentType) {
+      request.setRequestHeader("Content-Type", obj.contentType);
+    }
+
     if (obj.body) {
       request.send(JSON.stringify(obj.body));
     } else {

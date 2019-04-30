@@ -7,7 +7,10 @@ import * as inspectors from './inspectors';
 import {
   isOfficial,
   getOfficialValidationEndorsement,
-  getAdditionalEndorsements, getRecipientEndorsement, getEDSEndorsement
+  getAdditionalEndorsements,
+  getRecipientEndorsement,
+  getEDSEndorsement,
+  getOtherChainsFromSignature
 } from "./domain/certificates/useCases";
 
 const log = debug('Verifier');
@@ -143,6 +146,9 @@ export default class Verifier {
   }
 
   async _verifyMain () {
+
+    // TODO: Include other chains validation
+
     // Check transaction id validity
     this._doAction(
       SUB_STEPS.getTransactionId,
@@ -250,6 +256,12 @@ export default class Verifier {
     this._doAction(SUB_STEPS.checkExpiresDate, () =>
       inspectors.ensureNotExpired(this.expires)
     );
+
+    // Other blockchain verifications
+    let otherChain = getOtherChainsFromSignature(this.fullCertificate.signature);
+    if(otherChain) {
+      await this._verifyOtherBlockchain(otherChain[0]);
+    }
 
     // Check official validation
     if(isOfficial(this.fullCertificate)) {
@@ -483,5 +495,34 @@ export default class Verifier {
       }
       this._stepCallback(update);
     }
+  }
+
+  /**
+   * Verifies the certificate against other blockchains other than the
+   * accepted by the Blockcerts standard.
+   *
+   * @private
+   */
+  async _verifyOtherBlockchain(otherBlockchain) {
+
+    // Check transaction ID if not checked already
+    if(domain.chains.isMockChain(this.chain)) {
+      // Check transaction id validity
+      this._doAction(
+          SUB_STEPS.getOtherChainTransactionId,
+          () => inspectors.isTransactionIdValid(this.transactionId)
+      );
+    }
+
+    // Fetch remote hash
+    let txData = await this._doAsyncAction(
+        SUB_STEPS.fetchOtherChainRemoteHash,
+        async () => domain.verifier.lookForTx(
+            this.transactionId,
+            otherBlockchain.id,
+            this.version,
+            otherBlockchain.protocol,
+            SUB_STEPS.fetchOtherChainRemoteHash)
+    );
   }
 }

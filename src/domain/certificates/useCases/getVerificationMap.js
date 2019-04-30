@@ -2,7 +2,11 @@ import { NETWORKS, STEPS, SUB_STEPS } from '../../../constants';
 import chainsService from '../../chains';
 import { getText } from '../../i18n/useCases';
 import isOfficial from "./isOfficial";
-import {getEDSEndorsement, getRecipientEndorsement} from "./index";
+import {
+  getEDSEndorsement,
+  getOtherChainsFromSignature,
+  getRecipientEndorsement
+} from "./index";
 
 const versionVerificationMap = {
   [NETWORKS.mainnet]: [
@@ -25,6 +29,11 @@ const versionVerificationMap = {
     SUB_STEPS.checkExpiresDate,
   ]
 };
+
+const certificateOtherChainSubsteps = [
+    SUB_STEPS.getOtherChainTransactionId,
+    SUB_STEPS.fetchOtherChainRemoteHash
+];
 
 const officialValidationVerificationMap = {
   [NETWORKS.mainnet]: [
@@ -162,6 +171,11 @@ export default function getVerificationMap (chain, certificate) {
 function getVerificationSubstepsFromNetwork(network, certificate) {
   const verificationMap = Object.assign(versionVerificationMap);
   let basicSubsteps = verificationMap[network];
+  let hasOtherChains = !!getOtherChainsFromSignature(certificate.signature);
+
+  // Get transaction id if there are other blockchains but no blockcerts ones
+  if(network === NETWORKS.testnet && hasOtherChains)
+    basicSubsteps = basicSubsteps.concat(certificateOtherChainSubsteps);
 
   // Official verification
   if(isOfficial(certificate)) {

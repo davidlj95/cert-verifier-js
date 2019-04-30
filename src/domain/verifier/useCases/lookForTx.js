@@ -1,10 +1,16 @@
 import { BLOCKCHAINS, CERTIFICATE_VERSIONS, CONFIG, SUB_STEPS } from '../../../constants';
 import { VerifierError } from '../../../models';
-import { BitcoinExplorers, BlockchainExplorersWithSpentOutputInfo, EthereumExplorers } from '../../../explorers';
+import {
+  BitcoinExplorers,
+  BlockchainExplorersWithSpentOutputInfo,
+  EthereumExplorers,
+  EthereumWeb3Explorers
+} from '../../../explorers';
 import PromiseProperRace from '../../../helpers/promiseProperRace';
 import { getText } from '../../i18n/useCases';
+import {OTHER_BLOCKCHAINS} from "../../../constants/otherBlockchains";
 
-export default function lookForTx (transactionId, chain, certificateVersion) {
+export default function lookForTx (transactionId, chain, certificateVersion, protocol, substep = SUB_STEPS.fetchRemoteHash) {
   let BlockchainExplorers;
   switch (chain) {
     case BLOCKCHAINS.bitcoin.code:
@@ -17,17 +23,23 @@ export default function lookForTx (transactionId, chain, certificateVersion) {
     case BLOCKCHAINS.ethropst.code:
       BlockchainExplorers = EthereumExplorers;
       break;
+    case OTHER_BLOCKCHAINS.ethlocal.id:
+      if (protocol === 'ETH')
+        BlockchainExplorers = EthereumWeb3Explorers;
+      else
+        return Promise.reject(new VerifierError(substep, getText('errors', 'lookForTxInvalidChain')));
+      break;
     default:
-      return Promise.reject(new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxInvalidChain')));
+      return Promise.reject(new VerifierError(substep, getText('errors', 'lookForTxInvalidChain')));
   }
 
   // First ensure we can satisfy the MinimumBlockchainExplorers setting
   if (CONFIG.MinimumBlockchainExplorers < 0 || CONFIG.MinimumBlockchainExplorers > BlockchainExplorers.length) {
-    return Promise.reject(new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxInvalidAppConfig')));
+    return Promise.reject(new VerifierError(substep, getText('errors', 'lookForTxInvalidAppConfig')));
   }
   if (CONFIG.MinimumBlockchainExplorers > BlockchainExplorersWithSpentOutputInfo.length &&
     (certificateVersion === CERTIFICATE_VERSIONS.V1_1 || certificateVersion === CERTIFICATE_VERSIONS.V1_2)) {
-    return Promise.reject(new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxInvalidAppConfig')));
+    return Promise.reject(new VerifierError(substep, getText('errors', 'lookForTxInvalidAppConfig')));
   }
 
   // Queue up blockchain explorer APIs
@@ -48,7 +60,7 @@ export default function lookForTx (transactionId, chain, certificateVersion) {
   return new Promise((resolve, reject) => {
     return PromiseProperRace(promises, CONFIG.MinimumBlockchainExplorers).then(winners => {
       if (!winners || winners.length === 0) {
-        return Promise.reject(new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxCouldNotConfirm')));
+        return Promise.reject(new VerifierError(substep, getText('errors', 'lookForTxCouldNotConfirm')));
       }
 
       // Compare results returned by different blockchain apis. We pick off the first result and compare the others
@@ -64,15 +76,15 @@ export default function lookForTx (transactionId, chain, certificateVersion) {
       for (let i = 1; i < winners.length; i++) {
         const thisResponse = winners[i];
         if (firstResponse.issuingAddress !== thisResponse.issuingAddress) {
-          throw new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxDifferentAddresses'));
+          throw new VerifierError(substep, getText('errors', 'lookForTxDifferentAddresses'));
         }
         if (firstResponse.remoteHash !== thisResponse.remoteHash) {
-          throw new VerifierError(SUB_STEPS.fetchRemoteHash, getText('errors', 'lookForTxDifferentRemoteHashes'));
+          throw new VerifierError(substep, getText('errors', 'lookForTxDifferentRemoteHashes'));
         }
       }
       resolve(firstResponse);
     }).catch(err => {
-      reject(new VerifierError(SUB_STEPS.fetchRemoteHash, err.message));
+      reject(new VerifierError(substep, err.message));
     });
   });
 }
