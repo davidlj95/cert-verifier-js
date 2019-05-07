@@ -550,9 +550,14 @@ export default class Verifier {
       );
       keys = this.id;
 
+    // Ensure not revoked
     this._doAction(SUB_STEPS.checkOtherChainRevokedStatus, () =>
       inspectors.ensureNotRevoked(revokedAddresses, keys, SUB_STEPS.checkOtherChainRevokedStatus)
     );
 
+    // Check authenticity
+    this._doAction(SUB_STEPS.checkOtherChainAuthenticity, () =>
+      inspectors.ensureValidIssuingKey(issuerKeyMap, txData.issuingAddress, txData.time, SUB_STEPS.checkOtherChainAuthenticity)
+    );
   }
 }

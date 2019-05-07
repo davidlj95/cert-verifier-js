@@ -15,7 +15,7 @@ function getCaseInsensitiveKey (obj, value) {
   return obj[key];
 }
 
-export default function ensureValidIssuingKey (keyMap, txIssuingAddress, txTime) {
+export default function ensureValidIssuingKey (keyMap, txIssuingAddress, txTime, substep = SUB_STEPS.checkAuthenticity) {
   let validKey = false;
   const theKey = getCaseInsensitiveKey(keyMap, txIssuingAddress);
   txTime = dateToUnixTimestamp(txTime);
@@ -33,7 +33,7 @@ export default function ensureValidIssuingKey (keyMap, txIssuingAddress, txTime)
   }
   if (!validKey) {
     throw new VerifierError(
-      SUB_STEPS.checkAuthenticity,
+      substep,
       getText('errors', 'getCaseInsensitiveKey')
     );
   }

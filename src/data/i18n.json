@@ -51,6 +51,8 @@
       "parseOtherChainIssuerKeysLabelPending": "Parsing other chain's issuer keys",
       "checkOtherChainRevokedStatusLabel": "Check other chain's Revoked Status",
       "checkOtherChainRevokedStatusLabelPending": "Checking other chain's Revoked Status",
+      "checkOtherChainAuthenticityLabel": "Check other chain's keys Authenticity",
+      "checkOtherChainAuthenticityLabelPending": "Checking other chain's keys Authenticity",
       "checkOfficialValidationIsPresentLabel": "Check Officialization Requirement",
       "checkOfficialValidationIsPresentLabelPending": "Checking if the certificate requires officialization",
       "checkOfficialValidationIsForCurrentCertificateLabel": "Check Officialization found is for current assertion",

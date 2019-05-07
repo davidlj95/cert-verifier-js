@@ -19,6 +19,7 @@ const checkOtherChainMerkleRoot = 'checkOtherChainMerkleRoot';
 const getOtherChainIssuerProfile = 'getOtherChainIssuerProfile';
 const parseOtherChainIssuerKeys = 'parseOtherChainIssuerKeys';
 const checkOtherChainRevokedStatus = 'checkOtherChainRevokedStatus';
+const checkOtherChainAuthenticity = 'checkOtherChainAuthenticity';
 const checkOfficialValidationIsPresent = 'checkOfficialValidationIsPresent';
 const checkOfficialValidationIsForCurrentCertificate = 'checkOfficialValidationIsForCurrentCertificate';
 const checkOfficialValidationComputeLocalHash = 'checkOfficialValidationComputeLocalHash';
@@ -64,7 +65,8 @@ const subStepsMap = {
     checkAuthenticity,
     checkRevokedStatus,
     checkExpiresDate,
-    checkOtherChainRevokedStatus
+    checkOtherChainRevokedStatus,
+    checkOtherChainAuthenticity
   ],
   [STEPS.officialCheck]: [
     checkOfficialValidationIsPresent,
@@ -123,6 +125,7 @@ export {
   getOtherChainIssuerProfile,
   parseOtherChainIssuerKeys,
   checkOtherChainRevokedStatus,
+  checkOtherChainAuthenticity,
   checkOfficialValidationIsPresent,
   checkOfficialValidationIsForCurrentCertificate,
   checkOfficialValidationComputeLocalHash,
