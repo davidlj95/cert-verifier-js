@@ -529,5 +529,30 @@ export default class Verifier {
     this._doAction(SUB_STEPS.checkOtherChainMerkleRoot, () =>
         inspectors.ensureMerkleRootEqual(this.receipt.merkleRoot, txData.remoteHash, SUB_STEPS.checkOtherChainMerkleRoot)
     );
+
+    // Get issuer profile
+    let issuerProfileJson = await this._doAsyncAction(
+        SUB_STEPS.getOtherChainIssuerProfile,
+        async () => domain.verifier.getIssuerProfile(this.issuer.id, SUB_STEPS.getOtherChainIssuerProfile)
+    );
+
+    // Parse issuer keys
+    let issuerKeyMap = await this._doAsyncAction(
+        SUB_STEPS.parseOtherChainIssuerKeys,
+        () => domain.verifier.parseIssuerKeys(issuerProfileJson, SUB_STEPS.parseOtherChainIssuerKeys)
+    );
+
+    // Get revoked assertions
+    let keys;
+    let revokedAddresses = await this._doAsyncAction(
+        null,
+        async () => domain.verifier.getRevokedAssertions(this.issuer.revocationList)
+      );
+      keys = this.id;
+
+    this._doAction(SUB_STEPS.checkOtherChainRevokedStatus, () =>
+      inspectors.ensureNotRevoked(revokedAddresses, keys, SUB_STEPS.checkOtherChainRevokedStatus)
+    );
+
   }
 }

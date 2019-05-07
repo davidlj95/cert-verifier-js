@@ -3,7 +3,7 @@ import * as SUB_STEPS from '../constants/verificationSubSteps';
 import domain from '../domain';
 import { intersect } from '../helpers/array';
 
-export default function ensureNotRevoked (revokedAddresses, keys) {
+export default function ensureNotRevoked (revokedAddresses, keys, substep = SUB_STEPS.checkRevokedStatus) {
   if (!revokedAddresses || !keys) {
     // nothing to do
     return;
@@ -22,7 +22,7 @@ export default function ensureNotRevoked (revokedAddresses, keys) {
 
     if (indexOfMatch > -1) {
       throw new VerifierError(
-        SUB_STEPS.checkRevokedStatus,
+        substep,
         domain.certificates.generateRevocationReason(
           revokedAddresses[indexOfMatch].revocationReason
         )

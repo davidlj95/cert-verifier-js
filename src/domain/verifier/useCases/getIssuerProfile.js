@@ -9,14 +9,14 @@ import { getText } from '../../i18n/useCases';
  * @param issuerId
  * @returns {Promise<any>}
  */
-export default async function getIssuerProfile (issuerId) {
+export default async function getIssuerProfile (issuerId, substep = SUB_STEPS.getIssuerProfile) {
   const errorMessage = getText('errors', 'getIssuerProfile');
   if (!issuerId) {
-    throw new VerifierError(SUB_STEPS.getIssuerProfile, errorMessage);
+    throw new VerifierError(substep, errorMessage);
   }
 
   const response = await request({url: issuerId}).catch(() => {
-    throw new VerifierError(SUB_STEPS.getIssuerProfile, errorMessage);
+    throw new VerifierError(substep, errorMessage);
   });
 
   return JSON.parse(response);

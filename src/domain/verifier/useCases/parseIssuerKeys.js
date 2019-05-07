@@ -27,8 +27,9 @@ function createKeyObject (rawKeyObject, finalPublicKey = null) {
  * parseIssuerKeys
  *
  * @param issuerProfileJson
+ * @param substep
  */
-export default function parseIssuerKeys (issuerProfileJson) {
+export default function parseIssuerKeys (issuerProfileJson, substep = SUB_STEPS.parseIssuerKeys) {
   try {
     let keyMap = {};
     if ('@context' in issuerProfileJson) {
@@ -47,7 +48,7 @@ export default function parseIssuerKeys (issuerProfileJson) {
     return keyMap;
   } catch (e) {
     throw new VerifierError(
-      SUB_STEPS.parseIssuerKeys,
+      substep,
       getText('errors', 'parseIssuerKeys')
     );
   }

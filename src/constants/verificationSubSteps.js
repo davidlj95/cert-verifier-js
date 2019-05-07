@@ -16,6 +16,9 @@ const checkExpiresDate = 'checkExpiresDate';
 const getOtherChainTransactionId = 'getOtherChainTransactionId';
 const fetchOtherChainRemoteHash = 'fetchOtherChainRemoteHash';
 const checkOtherChainMerkleRoot = 'checkOtherChainMerkleRoot';
+const getOtherChainIssuerProfile = 'getOtherChainIssuerProfile';
+const parseOtherChainIssuerKeys = 'parseOtherChainIssuerKeys';
+const checkOtherChainRevokedStatus = 'checkOtherChainRevokedStatus';
 const checkOfficialValidationIsPresent = 'checkOfficialValidationIsPresent';
 const checkOfficialValidationIsForCurrentCertificate = 'checkOfficialValidationIsForCurrentCertificate';
 const checkOfficialValidationComputeLocalHash = 'checkOfficialValidationComputeLocalHash';
@@ -46,7 +49,9 @@ const subStepsMap = {
     getIssuerProfile,
     parseIssuerKeys,
     getOtherChainTransactionId,
-    fetchOtherChainRemoteHash
+    fetchOtherChainRemoteHash,
+    getOtherChainIssuerProfile,
+    parseOtherChainIssuerKeys
   ],
   [STEPS.hashComparison]: [
     compareHashes,
@@ -54,7 +59,13 @@ const subStepsMap = {
     checkReceipt,
     checkOtherChainMerkleRoot
   ],
-  [STEPS.statusCheck]: [checkIssuerSignature, checkAuthenticity, checkRevokedStatus, checkExpiresDate],
+  [STEPS.statusCheck]: [
+    checkIssuerSignature,
+    checkAuthenticity,
+    checkRevokedStatus,
+    checkExpiresDate,
+    checkOtherChainRevokedStatus
+  ],
   [STEPS.officialCheck]: [
     checkOfficialValidationIsPresent,
     checkOfficialValidationIsForCurrentCertificate,
@@ -109,6 +120,9 @@ export {
   getOtherChainTransactionId,
   fetchOtherChainRemoteHash,
   checkOtherChainMerkleRoot,
+  getOtherChainIssuerProfile,
+  parseOtherChainIssuerKeys,
+  checkOtherChainRevokedStatus,
   checkOfficialValidationIsPresent,
   checkOfficialValidationIsForCurrentCertificate,
   checkOfficialValidationComputeLocalHash,
