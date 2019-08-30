@@ -17,8 +17,10 @@ import TestnetTamperedHashes from './testnet-tampered-hashes-2.0';
 import TestnetV1Valid from './testnet-valid-1.2';
 import TestnetV2Valid from './testnet-valid-2.0';
 import TestnetV2ValidV1Issuer from './testnet-valid-v1-issuer-2.0';
+import CowcertsMocknetV2Valid  from './cowcerts-mocknet-valid-2.0';
 
 export default {
+  CowcertsMocknetV2Valid,
   EthereumMainV2Valid,
   EthereumMainInvalidMerkleRoot,
   EthereumMainRevoked,
